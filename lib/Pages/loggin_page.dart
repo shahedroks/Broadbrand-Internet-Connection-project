@@ -1,27 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 class LogginPage extends StatefulWidget {
   const LogginPage({super.key});
-
   @override
   State<LogginPage> createState() => _LogginPageState();
 }
-
 class _LogginPageState extends State<LogginPage> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore store =FirebaseFirestore.instance;
   TextEditingController email =TextEditingController();
   TextEditingController password =TextEditingController();
   bool _isVisible = false;
+  void onChakSignIn ()async{
+    try{
+      var isAuthState =await auth.signInWithEmailAndPassword(email: email.text, password: password.text);
+      Navigator.pushNamed(context, '/homepage');
+    } on FirebaseAuthException
+    catch(e)
+    {
 
-
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    
     // Size size = MediaQuery.of(context).size;
     return Container(
           width:MediaQuery.of(context).size.width*10,
           height:MediaQuery.of(context).size.height*10,
           // decoration: BoxDecoration(image:DecorationImage(image: AssetImage('Assets/Buy')) ),
-            decoration: BoxDecoration(image: DecorationImage(image: AssetImage('Assets/loggin.png'),fit: BoxFit.cover)),
+            decoration: BoxDecoration(image: DecorationImage(image: AssetImage('Assets/Login1.jpg'),fit: BoxFit.cover)),
             child: Scaffold(
               backgroundColor: Colors.transparent,
               body: SingleChildScrollView(
@@ -30,12 +39,12 @@ class _LogginPageState extends State<LogginPage> {
                   children: [
                     SizedBox(height: 120,),
                     Container(
-                      margin: EdgeInsets.only(left: 40),
+                      margin: EdgeInsets.only(left: 220,top: 80),
                       child: Text('Welcome \n Back',
                         style: TextStyle(
-                            fontSize: 40,fontWeight: FontWeight.bold,color: Colors.white,),),
+                            fontSize: 40,fontWeight: FontWeight.bold,color: Colors.black,),),
                     ),
-                    SizedBox(height: 190,),
+                    SizedBox(height: 140,),
                 
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
@@ -72,7 +81,9 @@ class _LogginPageState extends State<LogginPage> {
                         ),
                         Spacer(),
                         GestureDetector(
-                          onTap: (){Navigator.pushNamed(context, '/register');},
+                          onTap: (){
+                            onChakSignIn();
+                          },
                           child: Container(
                             margin: EdgeInsets.only(right: 40),
                             child: ClipRRect(
@@ -88,9 +99,14 @@ class _LogginPageState extends State<LogginPage> {
                     ),
                     SizedBox(height: 160,),
                     Row(children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 40),
-                          child: Text('Sing up',style: TextStyle(fontSize: 20,decoration: TextDecoration.underline),)),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, '/register');
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: 40),
+                            child: Text('Sing up',style: TextStyle(fontSize: 20,decoration: TextDecoration.underline),)),
+                      ),
                       Spacer(),
                       Container(
                           margin:EdgeInsets.only(right: 30),

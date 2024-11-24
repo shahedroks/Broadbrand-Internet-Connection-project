@@ -17,32 +17,38 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController email =TextEditingController();
   TextEditingController password =TextEditingController();
   bool isVisible = false;
-  void onRegister ()async{
-try{
-  var authState = auth.createUserWithEmailAndPassword(email: email.text, password: password.text);
-  await db.collection('user').add({
+  void onRegister() async {
+    // final url = Uri.parse('http://68.178.163.174:5503/user/register');
+    // Map body = {
+    //   'name': name.text,
+    //   'email': email.text,
+    //   'password': password.text,
+    //   'role': 'user',
+    // };
+    //
+    // Response res = await post(url, body: body);
+    //
+    // if(res.statusCode == 201){
+    //   Navigator.pushNamed(context, '/');
+    // }
 
-    'name':name.text,
-    'email':email.text,
-    'password':password.text,
-    'role':'user'
-  });
-  Navigator.pushNamed(context, '/');
-
-}
-// on FirebaseAuthException
-catch(err){
-  print('err');
-  // if(err.code == 'email-already-exists')
-  //   print('Email AlreadynExists');
-  // else if (err.code == 'invalid-email')
-  //   print('Email Invaid');
-  // else{
-  //   Navigator.pushNamed(context, '/');
-  // }
-}
+    try{
+      var authState = await auth.createUserWithEmailAndPassword(email: email.text, password: password.text);
+      // await db.collection('user').add({
+      //   'name': name.text,
+      //   'email': email.text,
+      //   'id': authState.user!.uid,
+      //   'role': 'user',
+      // });
+      Navigator.pushNamed(context, '/');
+    } on FirebaseAuthException catch(err){
+      if(err.code == 'email-already-exists'){
+        print('Already Email Used');
+      }else if(err.code == 'invalid-password') {
+        print('Password must be of 6 digits');
+      }
+    }
   }
-
   // bool _isPasswordEightCharecters = false;
   // bool _isHasOneNumber = false;
   // void onPasswordMatch (passwordd){
@@ -55,9 +61,6 @@ catch(err){
   //    _isHasOneNumber = false;
   //    if (numberRegexp.hasMatch(passwordd))
   //      _isHasOneNumber = true;
-  //
-  //
-  //
   //  });
   // }
   // @override
@@ -66,16 +69,14 @@ catch(err){
   //   super.initState();
   //   onPasswordMatch(password.text);
   // }
-
   @override
   Widget build(BuildContext context) {
-
     // Size size = MediaQuery.of(context).size;
     return Container(
       width:MediaQuery.of(context).size.width*10,
       height:MediaQuery.of(context).size.height*10,
       // decoration: BoxDecoration(image:DecorationImage(image: AssetImage('Assets/Buy')) ),
-      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('Assets/register.png'),fit: BoxFit.cover)),
+      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('Assets/Register1.jpg'),fit: BoxFit.cover)),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
@@ -83,21 +84,21 @@ catch(err){
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 120,
+                height: 80,
               ),
               Container(
-                margin: EdgeInsets.only(left: 40),
+                margin: EdgeInsets.only(left: 220,top: 80),
                 child: Text(
                   'Create \n Account',
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
               ),
               SizedBox(
-                height: 80,
+                height: 60,
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -148,7 +149,6 @@ catch(err){
                                   },
                                   icon:isVisible ? Icon(CupertinoIcons.eye)
                                       : Icon(CupertinoIcons.eye_slash)),
-
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
                                   borderSide: BorderSide(color: Colors.grey)),
@@ -156,10 +156,7 @@ catch(err){
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
                                   borderRadius: BorderRadius.circular(15))),
-
                         )),
-
-
               SizedBox(
                 height: 30,
               ),
@@ -172,7 +169,7 @@ catch(err){
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
-                          color:  state.isPasswordEight!? Colors.green : Colors.transparent,
+                          color:  state.isPasswordEight != false? Colors.green : Colors.transparent,
                           border: Border.all(color: Colors.grey.shade500),
                           borderRadius: BorderRadius.circular(50)),
                       child: Container(
@@ -201,8 +198,8 @@ catch(err){
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
-                          color: state.isPasswordOne!? Colors.green
-                              : Colors.transparent,
+                          color: state.isPasswordOne != false? Colors.green
+                             : Colors.transparent,
                           border: Border.all(color: Colors.grey.shade500),
                           borderRadius: BorderRadius.circular(50)),
                       child: Container(
@@ -294,10 +291,6 @@ catch(err){
           )
         ),
       ),
-
     );
-
-
   }
-
 }
