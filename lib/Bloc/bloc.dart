@@ -14,8 +14,6 @@ class CounterBolc extends Bloc<CounterEvent,CounterState>{
       else {
         isPasswordEightCopy = false;
       }
-
-
       isPasswordOneCopy = false;
       if (numberRegexp.hasMatch(event.password)){
         isPasswordOneCopy = true;
@@ -23,7 +21,6 @@ class CounterBolc extends Bloc<CounterEvent,CounterState>{
       else {
         isPasswordOneCopy = false;
       }
-
       emit(CounterState(isPasswordOne: false,isPasswordEight: false));
     }
     );

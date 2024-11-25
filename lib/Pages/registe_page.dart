@@ -41,12 +41,14 @@ class _RegisterPageState extends State<RegisterPage> {
       //   'role': 'user',
       // });
       Navigator.pushNamed(context, '/');
-    } on FirebaseAuthException catch(err){
-      if(err.code == 'email-already-exists'){
-        print('Already Email Used');
-      }else if(err.code == 'invalid-password') {
-        print('Password must be of 6 digits');
-      }
+    }
+    // on FirebaseAuthException
+    catch(err){
+      // if(err.code == 'email-already-exists'){
+      //   print('Already Email Used');
+      // }else if(err.code == 'invalid-password') {
+      //   print('Password must be of 6 digits');
+      // }
     }
   }
   // bool _isPasswordEightCharecters = false;
